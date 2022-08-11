@@ -196,6 +196,7 @@ public class StudyController {
 	
 	@GetMapping("/doneTodoTask")
 	public String doneTodoTask(TodoTaskForm todoTaskForm, Model model) {
+		//Todoタスクのうち終了したものをDoneタスクに移動する処理を追加する
 		showList(todoTaskForm,model);
 		return "crud";
 	}
