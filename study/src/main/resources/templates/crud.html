@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Todoタスク支援アプリ</title>
+</head>
+<body>
+	<h1>Todoタスク支援アプリ : CRUD</h1>
+	<h3 th:text="${title}">タイトル</h3>
+	<p th:if="${complete}" th:text="${complete}" style="color:blue"></p>
+	
+	<form method="POST"
+	th:action="${todoTaskForm.newTodoTask}? @{/study/insert} : @{/study/update}"
+	th:object="${todoTaskForm}">
+	<label>Todoタスクのタイトル</label><br>
+	<textarea rows="2" cols="50" th:field="*{todo_title}"></textarea><br>
+	<div th:if="${#fields.hasErrors('todo_title')}" th:errors="*{todo_title}"
+	style="color:red"></div>
+	<label>Todoタスクの内容</label><br>
+	<textarea rows="5" cols=50 th:field="*{todo_content}"></textarea><br>
+	<div th:if="${#fields.hasErrors('todo_content')}" th:errors="*{todo_content}"
+	style="color:red"></div><br>
+	<label>予想所要時間(分)</label><br>
+	<input type="number"  th:field="*{todo_time}"><br>
+	<div th:if="${#fields.hasErrors('todo_time')}" th:errors="*{todo_time}"
+	style="color:red"></div><br>
+	<input th:if="${todo_id}" type="hidden" th:field="*{todo_id}">
+	<input type="submit" value="送信">
+	</form>
+	
+	<a th:if="${todoTaskForm.newTodoTask}" th:href="@{/study/random}">自動選出</a><br>
+	
+	<p>Todoタスク一覧</p>
+	<table border="1" th:unless="${#lists.isEmpty(list)}"
+	style="table-layout:fixed">
+		<tr>
+			<th>タイトル</th>
+			<th>内容</th>
+			<th>予想所要時間</th>
+			<th>編集</th>
+			<th>削除</th>
+			<th>終了済みに移動</th>
+		</tr>
+		<tr th:each="obj: ${list}" align="center">
+			<td th:text="${obj.todo_title}"></td>
+			<td th:text="${obj.todo_content}"></td>
+			<td th:text="${obj.todo_time}"></td>
+			<td>
+				<form method="GET" th:action="@{/study/{todo_id}(todo_id=${obj.todo_id})}">
+					<input type="submit" value="編集">
+				</form>
+			</td>
+			<td>
+				<form method="POST" th:action="@{/study/delete}">
+					<input type="hidden" name="todo_id" th:value="${obj.todo_id}">
+					<input type="submit" value="削除">
+				</form>
+			</td>
+			<td>
+				<form method="GET" th:action="@{/study/doneTodoTask}">
+					<input type="hidden" name="todo_id" th:value="${obj.todo_id}">
+					<input type="submit" value="移動">
+				</form>
+			</td>
+		</tr>
+	</table>
+	<p th:unless="${todoTaskForm.newTodoTask}">
+		<a href="#" th:href="@{/study}">CRUD画面へ戻る</a>
+	</p>
+	<p>
+		<a th:href="@{/study/done}">終了済みタスク一覧</a>
+	</p>
+</body>
+</html>

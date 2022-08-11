@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>終了済みのタスク一覧</title>
+</head>
+<body>
+	<h1>終了済みのタスク一覧</h1>
+	<h3>終了したタスクの一覧です</h3>
+	<p th:if="${completeDoneTask}" th:text="${completeDoneTask}"></p>
+	
+	<form method="POST"
+	th:action="@{/study/updateDoneTask}"
+	th:object="${doneTaskForm}">
+	<label>Doneタスクのタイトル</label><br>
+	<textarea rows="2" cols="50" th:field="*{done_title}"></textarea><br>
+	<div th:if="${#fields.hasErrors('done_title')}" th:errors="*{done_title}"
+	style="color:red"></div>
+	<label>Doneタスクの内容</label><br>
+	<textarea rows="5" cols=50 th:field="*{done_content}"></textarea><br>
+	<div th:if="${#fields.hasErrors('done_content')}" th:errors="*{done_content}"
+	style="color:red"></div><br>
+	<label>予想所要時間(分)</label><br>
+	<input type="number"  th:field="*{done_time}"><br>
+	<div th:if="${#fields.hasErrors('done_time')}" th:errors="*{done_time}"
+	style="color:red"></div><br>
+	<input th:if="${done_id}" type="hidden" th:field="*{done_id}">
+	<input type="submit" value="送信">
+	</form>
+
+	
+		<p>Doneタスク一覧</p>
+	<table border="1" th:unless="${#lists.isEmpty(doneList)}"
+	style="table-layout:fixed">
+		<tr>
+			<th>タイトル</th>
+			<th>内容</th>
+			<th>予想所要時間</th>
+			<th>編集</th>
+			<th>削除</th>
+		</tr>
+		<tr th:each="obj: ${doneList}" align="center">
+			<td th:text="${obj.done_title}"></td>
+			<td th:text="${obj.done_content}"></td>
+			<td th:text="${obj.done_time}"></td>
+			<td>
+				<form method="GET" th:action="@{/study/done/{done_id}(done_id=${obj.done_id})}">
+					<input type="submit" value="編集">
+				</form>
+			</td>
+			<td>
+				<form method="POST" th:action="@{/study/deleteDoneTask}">
+					<input type="hidden" name="done_id" th:value="${obj.done_id}">
+					<input type="submit" value="削除">
+				</form>
+			</td>
+		</tr>
+	</table>
+	<a th:href="@{/study}">CRUD画面に戻る</a>
+</body>
+</html>
