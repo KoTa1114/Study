@@ -195,9 +195,19 @@ public class StudyController {
 	}
 	
 	@GetMapping("/doneTodoTask")
-	public String doneTodoTask(TodoTaskForm todoTaskForm, Model model) {
+	public String doneTodoTask(@RequestParam("todo_id") String id,TodoTaskForm todoTaskForm, Model model) {
 		//Todoタスクのうち終了したものをDoneタスクに移動する処理を追加する
-		showList(todoTaskForm,model);
+		Optional<TodoTask> todoTaskOpt = service.selectOneTodoTaskById(Integer.parseInt(id));
+		if(todoTaskOpt.isPresent()) {
+			TodoTask todoTask = todoTaskOpt.get();
+			service.deleteTodoTaskById(todoTask.getTodo_id());
+			DoneTask doneTask = changeTodoTaskToDoneTask(todoTask);
+			serviceDoneTask.updateDoneTask(doneTask);
+			showList(todoTaskForm,model);
+		} else {
+			model.addAttribute("msg", "Todoタスクがありません");
+			return "crud";
+		}
 		return "crud";
 	}
 	
@@ -236,5 +246,12 @@ public class StudyController {
 		form.setDone_content(doneTask.getDone_content());
 		form.setDone_time(doneTask.getDone_time());
 		return form;
+	}
+	private DoneTask changeTodoTaskToDoneTask(TodoTask todoTask) {
+		DoneTask doneTask = new DoneTask();
+		doneTask.setDone_title(todoTask.getTodo_title());
+		doneTask.setDone_content(todoTask.getTodo_content());
+		doneTask.setDone_time(todoTask.getTodo_time());
+		return doneTask;
 	}
 }

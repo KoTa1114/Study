@@ -7,7 +7,7 @@
 <body>
 	<h1>終了済みのタスク一覧</h1>
 	<h3>終了したタスクの一覧です</h3>
-	<p th:if="${completeDoneTask}" th:text="${completeDoneTask}"></p>
+	<p th:if="${completeDoneTask}" th:text="${completeDoneTask}" style="color:blue"></p>
 	
 	<form method="POST"
 	th:action="@{/study/updateDoneTask}"
