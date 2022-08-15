@@ -24,6 +24,10 @@
 	<input type="number"  th:field="*{todo_time}"><br>
 	<div th:if="${#fields.hasErrors('todo_time')}" th:errors="*{todo_time}"
 	style="color:red"></div><br>
+	<label>期限</label><br>
+	<input type="date" name="todo_limit">
+	<div th:if="${#fields.hasErrors('todo_limit')}" th:errors="*{todo_limit}"
+	style="color:red"></div><br>
 	<input th:if="${todo_id}" type="hidden" th:field="*{todo_id}">
 	<input type="submit" value="送信">
 	</form>
@@ -37,6 +41,7 @@
 			<th>タイトル</th>
 			<th>内容</th>
 			<th>予想所要時間</th>
+			<th>期限</th>
 			<th>編集</th>
 			<th>削除</th>
 			<th>終了済みに移動</th>
@@ -45,6 +50,7 @@
 			<td th:text="${obj.todo_title}"></td>
 			<td th:text="${obj.todo_content}"></td>
 			<td th:text="${obj.todo_time}"></td>
+			<td th:text="${obj.todo_limit}"></td>
 			<td>
 				<form method="GET" th:action="@{/study/{todo_id}(todo_id=${obj.todo_id})}">
 					<input type="submit" value="編集">

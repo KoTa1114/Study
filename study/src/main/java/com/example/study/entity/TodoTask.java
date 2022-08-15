@@ -15,4 +15,5 @@ public class TodoTask {
 	private String todo_title; //タスクのタイトル
 	private String todo_content; //タスクの中身
 	private Integer todo_time; //タスクにかかる予想時間
+	private String todo_limit; //タスクの期限
 }

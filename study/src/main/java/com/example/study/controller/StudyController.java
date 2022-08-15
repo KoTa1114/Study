@@ -61,10 +61,7 @@ public class StudyController {
 	public String insert(@Validated TodoTaskForm todoTaskForm, BindingResult bindingResult,
 			Model model, RedirectAttributes redirectAttributes) {
 		//FormからEntityへの詰め替え
-		TodoTask todoTask = new TodoTask();
-		todoTask.setTodo_title(todoTaskForm.getTodo_title());
-		todoTask.setTodo_content(todoTaskForm.getTodo_content());
-		todoTask.setTodo_time(todoTaskForm.getTodo_time());
+		TodoTask todoTask = makeTodoTask(todoTaskForm);
 		//入力チェック
 		if(!bindingResult.hasErrors()) {
 			service.insertTodoTask(todoTask);
@@ -217,7 +214,7 @@ public class StudyController {
 			todoTask.setTodo_title(todoTaskForm.getTodo_title());
 			todoTask.setTodo_content(todoTaskForm.getTodo_content());
 			todoTask.setTodo_time(todoTaskForm.getTodo_time());
-			return todoTask;
+			todoTask.setTodo_limit(todoTaskForm.getTodo_limit());			return todoTask;
 		}
 		
 		private DoneTask makeDoneTask(DoneTaskForm doneTaskForm) {
@@ -236,6 +233,7 @@ public class StudyController {
 		form.setTodo_title(todoTask.getTodo_title());
 		form.setTodo_content(todoTask.getTodo_content());
 		form.setTodo_time(todoTask.getTodo_time());
+		form.setTodo_limit(todoTask.getTodo_limit());
 		form.setNewTodoTask(false);
 		return form;
 	}

@@ -20,5 +20,7 @@ public class TodoTaskForm {
 	@Positive
 	@NotNull
 	private Integer todo_time;
+	@NotBlank
+	private String todo_limit;
 	private Boolean newTodoTask;
 }
