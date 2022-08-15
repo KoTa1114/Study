@@ -2,11 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>終了済みのタスク一覧</title>
+<title>Doneタスク一覧</title>
 </head>
 <body>
-	<h1>終了済みのタスク一覧</h1>
-	<h3>終了したタスクの一覧です</h3>
+	<h1>Doneタスク一覧</h1>
+	<h3>Doneタスクの一覧です</h3>
 	<p th:if="${completeDoneTask}" th:text="${completeDoneTask}" style="color:blue"></p>
 	
 	<form method="POST"

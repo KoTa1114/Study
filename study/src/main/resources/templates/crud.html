@@ -5,7 +5,7 @@
 <title>Todoタスク支援アプリ</title>
 </head>
 <body>
-	<h1>Todoタスク支援アプリ : CRUD</h1>
+	<h1>Todoタスク支援アプリ</h1>
 	<h3 th:text="${title}">タイトル</h3>
 	<p th:if="${complete}" th:text="${complete}" style="color:blue"></p>
 	
@@ -32,7 +32,7 @@
 	<input type="submit" value="送信">
 	</form>
 	
-	<a th:if="${todoTaskForm.newTodoTask}" th:href="@{/study/random}">自動選出</a><br>
+	<a th:if="${todoTaskForm.newTodoTask}" th:href="@{/study/random}">Todoタスク自動選出</a><br>
 	
 	<p>Todoタスク一覧</p>
 	<table border="1" th:unless="${#lists.isEmpty(list)}"
