@@ -1,41 +1,62 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>Todoタスク支援アプリ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Todoタスク管理アプリ</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-	<h1>Todoタスク支援アプリ</h1>
-	<h3 th:text="${title}">タイトル</h3>
-	<p th:if="${complete}" th:text="${complete}" style="color:blue"></p>
+	<h1 class="text-success">Todoタスク管理アプリ</h1>
+	<div class="container w-50 p-3">
+		<h3 th:text="${title}" class="text-success">タイトル</h3>
+		<p th:if="${complete}" th:text="${complete}" style="color:blue"></p>
+		<form method="POST"
+		th:action="${todoTaskForm.newTodoTask}? @{/study/insert} : @{/study/update}"
+		th:object="${todoTaskForm}">
+		<div class="form-group">
+			<label>Todoタスクのタイトル</label><br>
+			<textarea rows="2" cols="50" th:field="*{todo_title}" class="form-control"  placeholder="資料作成"></textarea><br>
+			<div th:if="${#fields.hasErrors('todo_title')}" th:errors="*{todo_title}"
+			style="color:red"></div>
+		</div>
+		<div class="form-group">
+			<label>Todoタスクの内容</label><br>
+			<textarea rows="5" cols=50 th:field="*{todo_content}" class="form-control"  placeholder="次の会議で使用する資料の作成"></textarea><br>
+			<div th:if="${#fields.hasErrors('todo_content')}" th:errors="*{todo_content}"
+			style="color:red"></div>
+		</div>
+		
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-lg-4">
+					<label>予想所要時間(分)</label><br>
+					<input type="number"  th:field="*{todo_time}" placeholder="100"><br>
+					<div th:if="${#fields.hasErrors('todo_time')}" th:errors="*{todo_time}"
+					style="color:red"></div><br>
+				</div>
+				<div class="col-lg-4">
+					<label>期限</label><br>
+					<input type="date" name="todo_limit"><br>
+					<div th:if="${#fields.hasErrors('todo_limit')}" th:errors="*{todo_limit}"
+					style="color:red"></div><br>
+				</div>
+				<div class="col-lg-4">
+					<input th:if="${todo_id}" type="hidden" th:field="*{todo_id}">
+					<input type="submit" value="送信" class="btn btn-primary"><br>
+				</div>
+			</div>
+		</div>
+		</form>
+	</div>
 	
-	<form method="POST"
-	th:action="${todoTaskForm.newTodoTask}? @{/study/insert} : @{/study/update}"
-	th:object="${todoTaskForm}">
-	<label>Todoタスクのタイトル</label><br>
-	<textarea rows="2" cols="50" th:field="*{todo_title}"></textarea><br>
-	<div th:if="${#fields.hasErrors('todo_title')}" th:errors="*{todo_title}"
-	style="color:red"></div>
-	<label>Todoタスクの内容</label><br>
-	<textarea rows="5" cols=50 th:field="*{todo_content}"></textarea><br>
-	<div th:if="${#fields.hasErrors('todo_content')}" th:errors="*{todo_content}"
-	style="color:red"></div><br>
-	<label>予想所要時間(分)</label><br>
-	<input type="number"  th:field="*{todo_time}"><br>
-	<div th:if="${#fields.hasErrors('todo_time')}" th:errors="*{todo_time}"
-	style="color:red"></div><br>
-	<label>期限</label><br>
-	<input type="date" name="todo_limit">
-	<div th:if="${#fields.hasErrors('todo_limit')}" th:errors="*{todo_limit}"
-	style="color:red"></div><br>
-	<input th:if="${todo_id}" type="hidden" th:field="*{todo_id}">
-	<input type="submit" value="送信">
-	</form>
+	<div style="text-align: right;">
+		<a th:if="${todoTaskForm.newTodoTask}" th:href="@{/study/random}" class="btn btn-primary pull-right">Todoタスク自動選出</a><br>
+	</div>
 	
-	<a th:if="${todoTaskForm.newTodoTask}" th:href="@{/study/random}">Todoタスク自動選出</a><br>
-	
-	<p>Todoタスク一覧</p>
-	<table border="1" th:unless="${#lists.isEmpty(list)}"
+	<p class="text-success">Todoタスク一覧</p>
+	<table class="table  table-striped table-hover table-bordered" th:unless="${#lists.isEmpty(list)}"
 	style="table-layout:fixed">
 		<tr>
 			<th>タイトル</th>
@@ -70,11 +91,14 @@
 			</td>
 		</tr>
 	</table>
+	
 	<p th:unless="${todoTaskForm.newTodoTask}">
-		<a href="#" th:href="@{/study}">CRUD画面へ戻る</a>
+		<a href="#" th:href="@{/study}">Todoタスク一覧画面へ戻る</a>
 	</p>
 	<p>
-		<a th:href="@{/study/done}">終了済みタスク一覧</a>
+		<a th:href="@{/study/done}">終了済みタスク一覧へ</a>
 	</p>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -2,22 +2,22 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>ランダムTODOタスク表示</title>
+<title>ランダムTodoタスク表示</title>
 </head>
 <body>
-	<h1>このTODOタスクを頑張りましょう</h1>
-	<h3>TODOタスク</h3>
+	<h1>このTodoタスクを頑張りましょう</h1>
+	<h3>Todoタスク</h3>
 	<th:block th:if="${msg}">
 		<p th:text="${msg}" style="color:red"></p>
-		<a th:href="@{/study/}">CRUD画面へ</a>
+		<a th:href="@{/study/}">Todoタスク一覧画面へ</a>
 	</th:block>
 	<th:block th:unless="${msg}">
-		<p th:text="${todoTaskForm.todo_title}">TODOタスクのタイトル</p>
-		<p th:text="${todoTaskForm.todo_content}">TODOタスクの内容</p>
+		<p th:text="${todoTaskForm.todo_title}">Todoタスクのタイトル</p>
+		<p th:text="${todoTaskForm.todo_content}">Todoタスクの内容</p>
 		<p th:text="${todoTaskForm.todo_time}">予想所要時間</p>
 	</th:block>
 	<p th:unless="${todoTaskForm.newTodoTask}">
-		<a href="#" th:href="@{/study}">CRUD画面へ戻る</a>
+		<a href="#" th:href="@{/study}">Todoタスク一覧画面へ戻る</a>
 	</p>
 </body>
 </html>
