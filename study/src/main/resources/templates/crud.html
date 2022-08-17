@@ -12,6 +12,8 @@
 	<div class="container w-50 p-3">
 		<h3 th:text="${title}" class="text-success">タイトル</h3>
 		<p th:if="${complete}" th:text="${complete}" style="color:blue"></p>
+		<p th:if="${delcomplete}" th:text="${delcomplete}" style="color:blue"></p>
+		<p th:if="${doneChange}" th:text="${doneChange}" style="color:blue"></p>
 		<form method="POST"
 		th:action="${todoTaskForm.newTodoTask}? @{/study/insert} : @{/study/update}"
 		th:object="${todoTaskForm}">
@@ -52,7 +54,7 @@
 	</div>
 	
 	<div style="text-align: right;">
-		<a th:if="${todoTaskForm.newTodoTask}" th:href="@{/study/random}" class="btn btn-primary pull-right">Todoタスク自動選出</a><br>
+		<a th:if="${todoTaskForm.newTodoTask}" th:href="@{/study/random}" class="btn btn-primary">Todoタスク自動選出</a><br>
 	</div>
 	
 	<p class="text-success">Todoタスク一覧</p>
@@ -93,7 +95,7 @@
 	</table>
 	
 	<p th:unless="${todoTaskForm.newTodoTask}">
-		<a href="#" th:href="@{/study}">Todoタスク一覧画面へ戻る</a>
+		<a href="#" th:href="@{/study}">Todoタスク一覧画面へ</a>
 	</p>
 	<p>
 		<a th:href="@{/study/done}">終了済みタスク一覧へ</a>

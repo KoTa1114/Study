@@ -1,36 +1,49 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport1" content="width=device-width, initial-scale=1.0">
+
 <title>Doneタスク一覧</title>
+<link href="../css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-	<h1>Doneタスク一覧</h1>
-	<h3>Doneタスクの一覧です</h3>
-	<p th:if="${completeDoneTask}" th:text="${completeDoneTask}" style="color:blue"></p>
-	
-	<form method="POST"
-	th:action="@{/study/updateDoneTask}"
-	th:object="${doneTaskForm}">
-	<label>Doneタスクのタイトル</label><br>
-	<textarea rows="2" cols="50" th:field="*{done_title}"></textarea><br>
-	<div th:if="${#fields.hasErrors('done_title')}" th:errors="*{done_title}"
-	style="color:red"></div>
-	<label>Doneタスクの内容</label><br>
-	<textarea rows="5" cols=50 th:field="*{done_content}"></textarea><br>
-	<div th:if="${#fields.hasErrors('done_content')}" th:errors="*{done_content}"
-	style="color:red"></div><br>
-	<label>予想所要時間(分)</label><br>
-	<input type="number"  th:field="*{done_time}"><br>
-	<div th:if="${#fields.hasErrors('done_time')}" th:errors="*{done_time}"
-	style="color:red"></div><br>
-	<input th:if="${done_id}" type="hidden" th:field="*{done_id}">
-	<input type="submit" value="送信">
-	</form>
+	<h1 class="text-success">Doneタスク一覧</h1>
+	<p th:if="${delcomplete}" th:text="${delcomplete}" style="color:blue"></p>
+	<div class="container w-50 p-3">
+		<h3 class="text-success">登録用フォーム</h3>
+		<p th:if="${completeDoneTask}" th:text="${completeDoneTask}" style="color:blue"></p>
+		<form method="POST"
+		th:action="@{/study/updateDoneTask}"
+		th:object="${doneTaskForm}">
+		<div class="form-group">
+			<label>Doneタスクのタイトル</label><br>
+			<textarea rows="2" cols="50" th:field="*{done_title}" class="form-control" placeholder="資料作成"></textarea><br>
+			<div th:if="${#fields.hasErrors('done_title')}" th:errors="*{done_title}"
+			style="color:red"></div>
+		</div>
+		<div class="form-group">
+			<label>Doneタスクの内容</label><br>
+			<textarea rows="5" cols=50 th:field="*{done_content}" class="form-control"  placeholder="次の会議で使用する資料の作成"></textarea><br>
+			<div th:if="${#fields.hasErrors('done_content')}" th:errors="*{done_content}"
+			style="color:red"></div><br>
+		</div>
+		<div class="form-group">
+			<label>予想所要時間(分)</label><br>
+			<input type="number"  th:field="*{done_time}" class="form-control" placeholder="100"><br>
+			<div th:if="${#fields.hasErrors('done_time')}" th:errors="*{done_time}"
+			style="color:red"></div><br>
+		</div>
+		<div style="text-align:right">
+			<input th:if="${done_id}" type="hidden" th:field="*{done_id}">
+			<input type="submit" value="送信" class="btn btn-primary">
+		</div>
+		</form>
+	</div>
 
 	
-		<p>Doneタスク一覧</p>
-	<table border="1" th:unless="${#lists.isEmpty(doneList)}"
+		<p class="text-success">Doneタスク一覧</p>
+	<table class="table table-striped table-hover table-bordered" th:unless="${#lists.isEmpty(doneList)}"
 	style="table-layout:fixed">
 		<tr>
 			<th>タイトル</th>
@@ -56,6 +69,8 @@
 			</td>
 		</tr>
 	</table>
-	<a th:href="@{/study}">Todoタスク一覧画面に戻る</a>
+	<a th:href="@{/study}">Todoタスク一覧画面へ</a>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -192,7 +192,8 @@ public class StudyController {
 	}
 	
 	@GetMapping("/doneTodoTask")
-	public String doneTodoTask(@RequestParam("todo_id") String id,TodoTaskForm todoTaskForm, Model model) {
+	public String doneTodoTask(@RequestParam("todo_id") String id,TodoTaskForm todoTaskForm,
+		Model model, RedirectAttributes redirectAttributes) {
 		//Todoタスクのうち終了したものをDoneタスクに移動する処理を追加する
 		Optional<TodoTask> todoTaskOpt = service.selectOneTodoTaskById(Integer.parseInt(id));
 		if(todoTaskOpt.isPresent()) {
@@ -200,12 +201,12 @@ public class StudyController {
 			service.deleteTodoTaskById(todoTask.getTodo_id());
 			DoneTask doneTask = changeTodoTaskToDoneTask(todoTask);
 			serviceDoneTask.updateDoneTask(doneTask);
-			showList(todoTaskForm,model);
+			redirectAttributes.addFlashAttribute("doneChange","移動が完了しました");
 		} else {
 			model.addAttribute("msg", "Todoタスクがありません");
-			return "crud";
+			return "redirect:/study";
 		}
-		return "crud";
+		return "redirect:/study";
 	}
 	
 		private TodoTask makeTodoTask(TodoTaskForm todoTaskForm) {
