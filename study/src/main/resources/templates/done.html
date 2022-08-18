@@ -5,13 +5,14 @@
 <meta name="viewport1" content="width=device-width, initial-scale=1.0">
 
 <title>Doneタスク一覧</title>
-<link href="../css/bootstrap.min.css" rel="stylesheet">
+<!-- <link href="../css/bootstrap.min.css" rel="stylesheet"> -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <body>
 	<h1 class="text-success">Doneタスク一覧</h1>
 	<p th:if="${delcomplete}" th:text="${delcomplete}" style="color:blue"></p>
 	<div class="container w-50 p-3">
-		<h3 class="text-success">登録用フォーム</h3>
+		<h3 th:text="${title}" class="text-success">登録用フォーム</h3>
 		<p th:if="${completeDoneTask}" th:text="${completeDoneTask}" style="color:blue"></p>
 		<form method="POST"
 		th:action="@{/study/updateDoneTask}"

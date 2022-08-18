@@ -84,7 +84,7 @@ public class StudyController {
 		}
 		//更新用のModelを作成する
 		makeUpdateModel(todoTaskForm, model);
-		return "crud";
+		return "crud";//crud
 	}
 	@GetMapping("/done/{done_id}")
 	public String showUpdateDoneTask(DoneTaskForm doneTaskForm, @PathVariable Integer done_id, Model model) {
