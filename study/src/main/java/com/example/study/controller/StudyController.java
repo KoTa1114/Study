@@ -68,7 +68,7 @@ public class StudyController {
 			redirectAttributes.addFlashAttribute("complete","登録が完了しました");
 			return "redirect:/study";
 		} else {
-			//エラーがある場合は、一覧表示処理を呼びます
+			//エラーがある場合は、一覧表示処理を呼ぶ
 			return showList(todoTaskForm, model);
 		}
 	}
@@ -84,7 +84,7 @@ public class StudyController {
 		}
 		//更新用のModelを作成する
 		makeUpdateModel(todoTaskForm, model);
-		return "crud";//crud
+		return "crud";
 	}
 	@GetMapping("/done/{done_id}")
 	public String showUpdateDoneTask(DoneTaskForm doneTaskForm, @PathVariable Integer done_id, Model model) {
@@ -208,7 +208,7 @@ public class StudyController {
 		}
 		return "redirect:/study";
 	}
-	
+		//TodoTaskFormからTodoTaskに詰め直して戻り値として返す
 		private TodoTask makeTodoTask(TodoTaskForm todoTaskForm) {
 			TodoTask todoTask = new TodoTask();
 			todoTask.setTodo_id(todoTaskForm.getTodo_id());
@@ -217,7 +217,7 @@ public class StudyController {
 			todoTask.setTodo_time(todoTaskForm.getTodo_time());
 			todoTask.setTodo_limit(todoTaskForm.getTodo_limit());			return todoTask;
 		}
-		
+		//DoneTaskFromからDoneTaskに詰め直して戻り値として返す
 		private DoneTask makeDoneTask(DoneTaskForm doneTaskForm) {
 			DoneTask doneTask = new DoneTask();
 			doneTask.setDone_id(doneTaskForm.getDone_id());
@@ -227,7 +227,7 @@ public class StudyController {
 			return doneTask;
 		}
 		
-	/** TodoTaskからTodoTaskFormに詰め直して戻り値として返します */
+	/** TodoTaskからTodoTaskFormに詰め直して戻り値として返す */
 	private TodoTaskForm makeTodoTaskForm(TodoTask todoTask) {
 		TodoTaskForm form = new TodoTaskForm();
 		form.setTodo_id(todoTask.getTodo_id());
@@ -238,6 +238,7 @@ public class StudyController {
 		form.setNewTodoTask(false);
 		return form;
 	}
+	//DoneTaskからDoneTaskFormに詰め直して戻り値として返す
 	private DoneTaskForm makeDoneTaskForm(DoneTask doneTask) {
 		DoneTaskForm form = new DoneTaskForm();
 		form.setDone_id(doneTask.getDone_id());
@@ -246,6 +247,7 @@ public class StudyController {
 		form.setDone_time(doneTask.getDone_time());
 		return form;
 	}
+	//TodoTaskからDoneTaskに変更する
 	private DoneTask changeTodoTaskToDoneTask(TodoTask todoTask) {
 		DoneTask doneTask = new DoneTask();
 		doneTask.setDone_title(todoTask.getTodo_title());
