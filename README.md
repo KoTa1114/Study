@@ -11,4 +11,6 @@
 
 ## 構成
 Todo,Done,Randomの3画面  
-
+<img width="1680" alt="Todo" src="https://user-images.githubusercontent.com/108277601/185588147-305617da-2fb2-4d56-ad1d-0baaf5410fce.png">
+<img width="1680" alt="Done" src="https://user-images.githubusercontent.com/108277601/185588135-f5aa7baa-2b86-4c21-843f-c44056450dbd.png">
+<img width="1680" alt="Random" src="https://user-images.githubusercontent.com/108277601/185588158-9434f075-d479-4281-8864-9c11cd2a9231.png">
