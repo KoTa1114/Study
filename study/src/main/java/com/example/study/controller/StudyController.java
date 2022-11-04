@@ -347,6 +347,7 @@ public class StudyController {
 			todoTask.setTodo_content(todoTaskForm.getTodo_content());
 			todoTask.setTodo_time(todoTaskForm.getTodo_time());
 			todoTask.setTodo_limit(todoTaskForm.getTodo_limit());
+			todoTask.setTodo_priority(todoTaskForm.getTodo_priority());
 			return todoTask;
 		}
 		//DoneTaskFromからDoneTaskに詰め直して戻り値として返す
@@ -383,6 +384,7 @@ public class StudyController {
 		form.setTodo_content(todoTask.getTodo_content());
 		form.setTodo_time(todoTask.getTodo_time());
 		form.setTodo_limit(todoTask.getTodo_limit());
+		form.setTodo_priority(todoTask.getTodo_priority());
 		form.setNewTodoTask(false);
 		return form;
 	}

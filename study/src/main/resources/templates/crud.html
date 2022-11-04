@@ -70,6 +70,12 @@
 					style="color:red"></div><br>
 				</div>
 				<div class="col-lg-4">
+					<label>優先度(1低い 2普通 3高い)</label><br>
+					<input type="number" th:field="*{todo_priority}" placeholder="1"><br>
+					<div th:if="${#fields.hasErrors('todo_priority')}" th:errors="*{todo_priority}"
+					style="color:red"></div><br>
+				</div>
+				<div class="col-lg-4">
 					<label>期限</label><br>
 					<input type="date" name="todo_limit"><br>
 					<div th:if="${#fields.hasErrors('todo_limit')}" th:errors="*{todo_limit}"
@@ -96,6 +102,7 @@
 			<th>内容</th>
 			<th>予想所要時間(分)</th>
 			<th>期限</th>
+			<th>優先度</th>
 			<th>編集</th>
 			<th>削除</th>
 			<th>終了済みに移動</th>
@@ -105,6 +112,7 @@
 			<td th:text="${obj.todo_content}"></td>
 			<td th:text="${obj.todo_time}"></td>
 			<td th:text="${obj.todo_limit}"></td>
+			<td th:text="${obj.todo_priority}"></td>
 			<td>
 				<form method="GET" th:action="@{/study/{todo_id}(todo_id=${obj.todo_id})}">
 					<input type="submit" value="編集">

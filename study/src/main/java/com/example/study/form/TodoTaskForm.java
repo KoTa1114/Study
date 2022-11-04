@@ -23,4 +23,7 @@ public class TodoTaskForm {
 	@NotBlank
 	private String todo_limit;
 	private Boolean newTodoTask;
+	@NotNull
+	@Positive
+	private Integer todo_priority;
 }

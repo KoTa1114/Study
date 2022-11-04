@@ -16,4 +16,5 @@ public class TodoTask {
 	private String todo_content; //タスクの中身
 	private Integer todo_time; //タスクにかかる予想時間
 	private String todo_limit; //タスクの期限
+	private Integer todo_priority; //タスクの優先順位 低い1 普通2 高い3
 }
