@@ -18,13 +18,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.study.entity.TodoTask;
 import com.example.study.entity.DoneTask;
 import com.example.study.entity.Memo;
+import com.example.study.entity.Quiz;
 import com.example.study.service.StudyServiceTodoTask;
 import com.example.study.service.StudyServiceDoneTask;
 import com.example.study.service.StudyServiceMemo;
+import com.example.study.service.StudyServiceQuiz;
 import com.example.study.form.TodoTaskForm;
 import com.example.study.form.DoneTaskForm;
 import com.example.study.form.MemoForm;
-
+import com.example.study.form.QuizForm;
 
 
 
@@ -37,6 +39,8 @@ public class StudyController {
 	StudyServiceDoneTask serviceDoneTask;
 	@Autowired
 	StudyServiceMemo serviceMemo;
+	@Autowired
+	StudyServiceQuiz serviceQuiz;
 	@ModelAttribute
 	public TodoTaskForm setUpForm() {
 		TodoTaskForm form = new TodoTaskForm();
@@ -51,6 +55,11 @@ public class StudyController {
 	public MemoForm setUpMemoForm() {
 		MemoForm memoForm = new MemoForm();
 		return memoForm;
+	}
+	@ModelAttribute
+	public QuizForm setUpQuizForm() {
+		QuizForm quizForm = new QuizForm();
+		return quizForm;
 	}
 	@GetMapping
 	public String showList(TodoTaskForm todoTaskForm, Model model) {
@@ -73,6 +82,13 @@ public class StudyController {
 		model.addAttribute("memoList",memoList);
 		model.addAttribute("title","登録用フォーム");
 		return "/memo";
+	}
+	@GetMapping("/quiz")
+	public String showQuizList(Model model) {
+		Iterable<Quiz> quizList = serviceQuiz.selectAllQuiz();
+		model.addAttribute("quizList",quizList);
+		model.addAttribute("title","登録用フォーム");
+		return "/quiz";
 	}
 	@PostMapping("/insert")
 	public String insert(@Validated TodoTaskForm todoTaskForm, BindingResult bindingResult,
@@ -131,6 +147,20 @@ public class StudyController {
 		makeUpdateMemoModel(memoForm, model);
 		return "memo";
 	}
+	@GetMapping("/quiz/{quiz_id}")
+	public String showUpdateQuiz(QuizForm quizForm, @PathVariable Integer quiz_id, Model model) {
+		//Quizを取得
+		Optional<Quiz> quizOpt = serviceQuiz.selectOneQuizById(quiz_id);
+		//QuizFormへの詰め直し
+		Optional<QuizForm> quizFormOpt = quizOpt.map(t -> makeQuizForm(t));
+		//QuizFormがnullでなければ中身を取り出す
+		if(quizFormOpt.isPresent()) {
+			quizForm = quizFormOpt.get();
+		}
+		//更新用のmodelを作成する
+		makeUpdateQuizModel(quizForm, model);
+		return "quiz";
+	}
 	private void makeUpdateModel(TodoTaskForm todoTaskForm, Model model) {
 		model.addAttribute("todo_id", todoTaskForm.getTodo_id());
 		todoTaskForm.setNewTodoTask(false);
@@ -146,6 +176,11 @@ public class StudyController {
 		model.addAttribute("memo_id", memoForm.getMemo_id());
 		model.addAttribute("memoForm", memoForm);
 		model.addAttribute("title", "更新用フォーム");
+	}
+	private void makeUpdateQuizModel(QuizForm quizForm, Model model) {
+		model.addAttribute("quiz_id",quizForm.getQuiz_id());
+		model.addAttribute("quizForm",quizForm);
+		model.addAttribute("title","更新用フォーム");
 	}
 	@PostMapping("/update")
 	public String update(
@@ -209,6 +244,26 @@ public class StudyController {
 			return "memo";
 		}
 	}
+	@PostMapping("/updateQuiz")
+	public String updateQuiz(
+		@Validated QuizForm quizForm,
+		BindingResult result,
+		Model model,
+		RedirectAttributes redirectAttributes) {
+		//QuizFormからQuizに詰め直す
+		Quiz quiz = makeQuiz(quizForm);
+		//入力チェック
+		if(!result.hasErrors()) {
+			serviceQuiz.updateQuiz(quiz);
+			redirectAttributes.addFlashAttribute("completeQuiz","更新が完了しました");
+			//更新画面を表示する
+			return "redirect:/study/quiz/";
+		} else {
+			//更新用のmodelを作成する
+			makeUpdateQuizModel(quizForm, model);
+			return "quiz";
+		}
+	}
 	@PostMapping("/delete")
 	public String delete (
 			@RequestParam("todo_id") String id,
@@ -238,6 +293,16 @@ public class StudyController {
 		serviceMemo.deleteMemoById(Integer.parseInt(id));
 		redirectAttributes.addFlashAttribute("delcomplete", "削除が完了しました");
 		return "redirect:/study/memo";
+	}
+	@PostMapping("/deleteQuiz")
+	public String deleteQuiz(
+			@RequestParam("quiz_id") String id,
+			Model model,
+			RedirectAttributes redirectAttributes) {
+		//Quizを一件削除してリダイレクト
+		serviceQuiz.deleteQuizById(Integer.parseInt(id));
+		redirectAttributes.addFlashAttribute("delcomplete","削除が完了しました");
+		return "redirect:/study/quiz";
 	}
 	@GetMapping("/random")
 	public String showTodoTask(TodoTaskForm todoTaskForm, Model model) {
@@ -301,6 +366,14 @@ public class StudyController {
 			memo.setMemo_content(memoForm.getMemo_content());
 			return memo;
 		}
+		//QuizFormからQuizに詰め直して戻り値として返す
+		private Quiz makeQuiz(QuizForm quizForm) {
+			Quiz quiz = new Quiz();
+			quiz.setQuiz_id(quizForm.getQuiz_id());
+			quiz.setQuiz_question(quizForm.getQuiz_question());
+			quiz.setQuiz_answer(quizForm.getQuiz_answer());
+			return quiz;
+		}
 		
 	/** TodoTaskからTodoTaskFormに詰め直して戻り値として返す */
 	private TodoTaskForm makeTodoTaskForm(TodoTask todoTask) {
@@ -328,6 +401,13 @@ public class StudyController {
 		form.setMemo_id(memo.getMemo_id());
 		form.setMemo_title(memo.getMemo_title());
 		form.setMemo_content(memo.getMemo_content());
+		return form;
+	}
+	private QuizForm makeQuizForm(Quiz quiz) {
+		QuizForm form = new QuizForm();
+		form.setQuiz_id(quiz.getQuiz_id());
+		form.setQuiz_question(quiz.getQuiz_question());
+		form.setQuiz_answer(quiz.getQuiz_answer());
 		return form;
 	}
 	//TodoTaskからDoneTaskに変更する
