@@ -28,6 +28,10 @@ import com.example.study.form.DoneTaskForm;
 import com.example.study.form.MemoForm;
 import com.example.study.form.QuizForm;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 
 
 @Controller
@@ -338,6 +342,19 @@ public class StudyController {
 			return "redirect:/study";
 		}
 		return "redirect:/study";
+	}
+	@GetMapping("/quiz/play")
+	public String showQuiz(QuizForm quizForm, Model model) {
+		List<Quiz> quizPlayList = new ArrayList<Quiz>();
+		for(int i = 0; i < 3; i++) {
+			//Quizを取得
+			Optional<Quiz> quizOpt = serviceQuiz.selectOneRandomQuiz();
+			if(quizOpt.isPresent()) {
+				quizPlayList.add(quizOpt.get());
+			}
+		}
+		model.addAttribute("quizPlayList", quizPlayList);
+		return "redirect:/quiz/play";
 	}
 		//TodoTaskFormからTodoTaskに詰め直して戻り値として返す
 		private TodoTask makeTodoTask(TodoTaskForm todoTaskForm) {

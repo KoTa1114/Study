@@ -3,6 +3,8 @@ package com.example.study.form;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Max;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,6 +26,7 @@ public class TodoTaskForm {
 	private String todo_limit;
 	private Boolean newTodoTask;
 	@NotNull
-	@Positive
+	@Min(value=1)
+	@Max(value=3)
 	private Integer todo_priority;
 }

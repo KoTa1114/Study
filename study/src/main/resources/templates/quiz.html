@@ -50,7 +50,9 @@
 		</div>
 		<div class="form-group">
 			<label>クイズの答え</label><br>
-			<textarea rows="5" cols=50 th:field="*{quiz_answer}" class="form-control"  placeholder="次の会議で使用する資料の作成"></textarea><br>
+			<input type="radio" value="true" th:field="*{quiz_answer}"> 「o」
+			<input type="radio" value="false" th:field="*{quiz_answer}"> 「x」
+			<br>
 			<div th:if="${#fields.hasErrors('quiz_answer')}" th:errors="*{quiz_answer}"
 			style="color:red"></div>
 		</div>
@@ -64,16 +66,21 @@
 		</div>
 		</form>
 	</div>
+	<div style="text-align: right;">
+		<a th:href="@{/study/quiz/play}" class="btn btn-primary">クイズに挑戦する</a><br>
+	</div>
 	<p class="text-success">クイズ一覧</p>
 	<table class="table  table-striped table-hover table-bordered" th:unless="${#lists.isEmpty(quizList)}"
 	style="table-layout:fixed">
 		<tr>
 			<th>内容</th>
 			<th>解答</th>
+			<th>編集</th>
+			<th>削除</th>
 		</tr>
 		<tr th:each="obj: ${quizList}" align="center">
 			<td th:text="${obj.quiz_question}"></td>
-			<td th:text="${obj.quiz_answer}"></td>
+			<td th:text="${obj.quiz_answer} == true?'o':'x'"></td>
 			<td>
 				<form method="GET" th:action="@{/study/quiz/{quiz_id}(quiz_id=${obj.quiz_id})}">
 					<input type="submit" value="編集">

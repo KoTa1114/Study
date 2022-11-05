@@ -13,5 +13,5 @@ public class Quiz {
 	@Id
 	private Integer quiz_id;
 	private String quiz_question;
-	private String quiz_answer;
+	private Boolean quiz_answer;
 }
