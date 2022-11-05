@@ -27,6 +27,6 @@ public class TodoTaskForm {
 	private Boolean newTodoTask;
 	@NotNull
 	@Min(value=1)
-	@Max(value=3)
+	@Max(value=100)
 	private Integer todo_priority;
 }

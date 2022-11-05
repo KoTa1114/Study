@@ -70,7 +70,7 @@
 					style="color:red"></div><br>
 				</div>
 				<div class="col-lg-4">
-					<label>優先度(1低い 2普通 3高い)</label><br>
+					<label>優先度(低い 1 ~ 100 高い)</label><br>
 					<input type="number" th:field="*{todo_priority}" placeholder="1"><br>
 					<div th:if="${#fields.hasErrors('todo_priority')}" th:errors="*{todo_priority}"
 					style="color:red"></div><br>
