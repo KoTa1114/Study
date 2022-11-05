@@ -29,6 +29,7 @@ import com.example.study.form.MemoForm;
 import com.example.study.form.QuizForm;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -308,7 +309,7 @@ public class StudyController {
 		redirectAttributes.addFlashAttribute("delcomplete","削除が完了しました");
 		return "redirect:/study/quiz";
 	}
-	@GetMapping("/random")
+	/*@GetMapping("/random")
 	public String showTodoTask(TodoTaskForm todoTaskForm, Model model) {
 		//TodoTaskを取得
 		Optional<TodoTask> todoTaskOpt = service.selectOneRandomTodoTask();
@@ -323,6 +324,15 @@ public class StudyController {
 		}
 		//表示用Modelへの格納
 		model.addAttribute("todoTaskForm", todoTaskForm);
+		return "random";
+	}*/
+	@GetMapping("/random")
+	public String showTodoTask(Model model) {
+		Integer maxTime = 200; //好きな値を入力してもらうようにする
+		//TodoTaskを取得
+		Iterable<TodoTask> todoTaskList = service.selectAllTodoTask();
+		Iterable<TodoTask> selectTodoTaskList = DP(todoTaskList,maxTime);
+		model.addAttribute("selectTodoTaskList",selectTodoTaskList);
 		return "random";
 	}
 	
@@ -449,5 +459,65 @@ public class StudyController {
 		doneTask.setDone_content(todoTask.getTodo_content());
 		doneTask.setDone_time(todoTask.getTodo_time());
 		return doneTask;
+	}
+	//動的計画法により適切な選択を行う
+	private ArrayList<TodoTask> DP(Iterable<TodoTask> todoTaskList, Integer maxTime) {
+		ArrayList<TodoTask> selectTodoTaskList = new ArrayList<TodoTask>();
+		ArrayList<TodoTask> todoTaskArrayList = new ArrayList<TodoTask>();
+		//Iterable -> ArrayListへ変換
+		for(TodoTask todoTask : todoTaskList) {
+			todoTaskArrayList.add(todoTask);
+		}
+		//リストに含まれるTodoTaskの個数
+		Integer listSize = todoTaskArrayList.size();
+		//dpテーブルを作成 初期化
+		Integer[][] dp = new Integer[listSize+1][maxTime+1];
+		for(int i = 0; i <= listSize; i++) {
+			for(int j = 0; j<= maxTime; j++) {
+				dp[i][j] = -1;
+			}
+		}
+		dp[0][0] = 0;
+		//配るDP
+		for(int i = 0; i < listSize; i++) {
+			TodoTask todoTask = todoTaskArrayList.get(i);
+			Integer time = todoTask.getTodo_time();
+			Integer priority = todoTask.getTodo_priority();
+			for(int j = 0; j <= maxTime; j++) {
+				if(dp[i][j] == -1) continue;
+				//i番目を選ばない場合
+				dp[i+1][j] = Math.max(dp[i+1][j],dp[i][j]);
+				//i番目を選ぶ場合
+				if(j+time <= maxTime) {
+					dp[i+1][j+time] = Math.max(dp[i+1][j+time],dp[i][j]+priority);
+				}
+			}
+		}
+		Integer maxSumPriority = 0; //実現可能な組み合わせにおけるpriorityの和の最大値をもつ
+		Integer sumTime = 0; //その時の合計時間を持つ
+		//maxSumPriorityとsumTimeを求める
+		for(int i = 0; i <= maxTime; i++) {
+			if(maxSumPriority < dp[listSize][i]) {
+				maxSumPriority = dp[listSize][i];
+				sumTime = i;
+			}
+		}
+		//maxSumPriorityとsumTimeを実現するようなTodoTaskの選び方を求める
+		for(int i = listSize-1; i>= 0; i--) {
+			TodoTask todoTask = todoTaskArrayList.get(i);
+			Integer time = todoTask.getTodo_time();
+			Integer priority = todoTask.getTodo_priority();
+			if(dp[i][sumTime] == dp[i+1][sumTime]) continue;
+			else {
+				if(sumTime-time < 0 || sumTime < 0) continue;
+				if((dp[i][sumTime-time]+priority) == dp[i+1][sumTime]) {
+					sumTime -= time;
+					maxSumPriority -= priority;
+					selectTodoTaskList.add(todoTask);
+				}
+			}
+		}
+		Collections.reverse(selectTodoTaskList);
+		return selectTodoTaskList;
 	}
 }

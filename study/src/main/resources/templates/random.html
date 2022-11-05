@@ -33,6 +33,7 @@
 	  </div>
 	</nav>
 	</header>
+	<!--
 	<h1 class="text-success">このTodoタスクを頑張りましょう！</h1>
 	<div style="text-align:center">
 		<h3 class="text-success">選ばれたTodoタスク</h3>
@@ -45,6 +46,27 @@
 			<p th:text="${todoTaskForm.todo_time} + '分'"></p>
 		</th:block>
 	</div>
+	--->
+
+	<p class="text-success">このTodoタスクを頑張りましょう</p>
+	<table class="table  table-striped table-hover table-bordered" th:unless="${#lists.isEmpty(selectTodoTaskList)}"
+	style="table-layout:fixed">
+		<tr>
+			<th>タイトル</th>
+			<th>内容</th>
+			<th>予想所要時間(分)</th>
+			<th>期限</th>
+			<th>優先度</th>
+		</tr>
+		<tr th:each="obj: ${selectTodoTaskList}" align="center">
+			<td th:text="${obj.todo_title}"></td>
+			<td th:text="${obj.todo_content}"></td>
+			<td th:text="${obj.todo_time}"></td>
+			<td th:text="${obj.todo_limit}"></td>
+			<td th:text="${obj.todo_priority}"></td>
+		</tr>
+	</table>
+
 	<p th:unless="${todoTaskForm.newTodoTask}">
 		<a href="#" th:href="@{/study}">Todoタスク一覧画面へ</a>
 	</p>
