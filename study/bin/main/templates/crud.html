@@ -71,7 +71,7 @@
 				</div>
 				<div class="col-lg-4">
 					<label>優先度(低い 1 ~ 100 高い)</label><br>
-					<input type="number" th:field="*{todo_priority}" placeholder="1"><br>
+					<input type="number" th:field="*{todo_priority}" placeholder="50"><br>
 					<div th:if="${#fields.hasErrors('todo_priority')}" th:errors="*{todo_priority}"
 					style="color:red"></div><br>
 				</div>
@@ -90,8 +90,17 @@
 		</form>
 	</div>
 	
+	<!--
 	<div style="text-align: right;">
 		<a th:if="${todoTaskForm.newTodoTask}" th:href="@{/study/random}" class="btn btn-primary">Todoタスク自動選出</a><br>
+	</div>
+	--->
+	<div style="text-align: right;">
+		<form th:action="@{/study/random}" method="POST">
+			<p>何分以内でTodoタスクを選出したいか入力してください</p>
+			<input type="number" name="maxTime" th:value="${maxTime}" placeholder="100">
+			<input type="submit" value="Todoタスク自動選出" class="btn btn-primary">
+		</form>
 	</div>
 	
 	<p class="text-success">Todoタスク一覧</p>

@@ -326,9 +326,9 @@ public class StudyController {
 		model.addAttribute("todoTaskForm", todoTaskForm);
 		return "random";
 	}*/
-	@GetMapping("/random")
-	public String showTodoTask(Model model) {
-		Integer maxTime = 200; //好きな値を入力してもらうようにする
+	@PostMapping("/random")
+	public String showTodoTask(@RequestParam("maxTime") Integer maxTime, Model model) {
+		//Integer maxTime = 200; //好きな値を入力してもらうようにする
 		//TodoTaskを取得
 		Iterable<TodoTask> todoTaskList = service.selectAllTodoTask();
 		Iterable<TodoTask> selectTodoTaskList = DP(todoTaskList,maxTime);
