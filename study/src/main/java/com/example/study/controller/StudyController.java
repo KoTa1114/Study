@@ -343,18 +343,31 @@ public class StudyController {
 		}
 		return "redirect:/study";
 	}
-	@GetMapping("/quiz/play")
+	@GetMapping("/play")
 	public String showQuiz(QuizForm quizForm, Model model) {
-		List<Quiz> quizPlayList = new ArrayList<Quiz>();
-		for(int i = 0; i < 3; i++) {
-			//Quizを取得
-			Optional<Quiz> quizOpt = serviceQuiz.selectOneRandomQuiz();
-			if(quizOpt.isPresent()) {
-				quizPlayList.add(quizOpt.get());
-			}
+		//Quizを取得
+		Optional<Quiz> quizOpt = serviceQuiz.selectOneRandomQuiz();
+		//値が入っているか判定する
+		if(quizOpt.isPresent()) {
+			//QuizFormへの詰め直し
+			Optional<QuizForm> quizFormOpt = quizOpt.map(t -> makeQuizForm(t));
+			quizForm = quizFormOpt.get();
+		} else {
+			model.addAttribute("msg", "問題がありません");
+			return "/play";
 		}
-		model.addAttribute("quizPlayList", quizPlayList);
-		return "redirect:/quiz/play";
+		//表示用Modelへの格納
+		model.addAttribute("quizForm", quizForm);
+		return "/play";
+	}
+	@PostMapping("/check")
+	public String checkQuiz(QuizForm quizForm, @RequestParam Boolean answer, Model model) {
+		if(serviceQuiz.checkQuiz(quizForm.getQuiz_id(), answer)) {
+			model.addAttribute("msg","正解です");
+		} else {
+			model.addAttribute("msg","不正解です");
+		}
+		return "/result";
 	}
 		//TodoTaskFormからTodoTaskに詰め直して戻り値として返す
 		private TodoTask makeTodoTask(TodoTaskForm todoTaskForm) {

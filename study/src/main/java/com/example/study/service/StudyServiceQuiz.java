@@ -16,4 +16,6 @@ public interface StudyServiceQuiz {
 	void updateQuiz(Quiz quiz);
 	//Quizを削除する
 	void deleteQuizById(Integer id);
+	//Quizの正解/不正解を判定する
+	Boolean checkQuiz(Integer id, Boolean myAnswer);
 }

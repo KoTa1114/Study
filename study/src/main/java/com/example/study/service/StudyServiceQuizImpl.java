@@ -41,4 +41,16 @@ public class StudyServiceQuizImpl implements StudyServiceQuiz {
 	public void deleteQuizById(Integer id) {
 		repository.deleteById(id);
 	}
+	@Override
+	public Boolean checkQuiz(Integer id, Boolean myAnswer) {
+		Boolean check = false;
+		Optional<Quiz> quizOpt = repository.findById(id);
+		if(quizOpt.isPresent()) {
+			Quiz quiz = quizOpt.get();
+			if(quiz.getQuiz_answer().equals(myAnswer)) {
+				check = true;
+			}
+		}
+		return check;
+	}
 }

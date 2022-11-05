@@ -33,31 +33,13 @@
 	</nav>
 	</header>
 	
-	<th:block th:if="${quizPlayList}">
-		<div class="container w-50 p-3">
-			<form method="POST"
-			th:action="@{/study/quiz/check}"
-			th:object="${todoTaskForm}">
-				<div class="form-group">
-					<label>Todoタスクのタイトル</label><br>
-					<textarea rows="2" cols="50" th:field="*{todo_title}" class="form-control"  placeholder="資料作成"></textarea><br>
-					<div th:if="${#fields.hasErrors('todo_title')}" th:errors="*{todo_title}"
-					style="color:red"></div>
-				</div>
-				<div class="form-group">
-					<label>Todoタスクの内容</label><br>
-					<textarea rows="5" cols=50 th:field="*{todo_content}" class="form-control"  placeholder="次の会議で使用する資料の作成"></textarea><br>
-					<div th:if="${#fields.hasErrors('todo_content')}" th:errors="*{todo_content}"
-					style="color:red"></div>
-				</div>
-				<div class="container-fluid">
-					<div class="col-lg-4">
-						<input th:if="${todo_id}" type="hidden" th:field="*{todo_id}">
-						<input type="submit" value="送信" class="btn btn-primary"><br>
-					</div>
-				</div>
-			</form>
-		</div>
+	<th:block th:unless="${msg}">
+		<p th:text="${quizForm.quiz_question}">クイズ内容</p>
+		<form th:action="@{/study/check}" th:object="${quizForm}" method="POST">
+			<input type="hidden" th:field="*{quiz_id}">
+			<button name="answer" value="true">o</button>
+			<button name="answer" value="false">x</button>
+		</form>
 	</th:block>
 	
 </body>
