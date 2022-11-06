@@ -19,6 +19,7 @@ import com.example.study.entity.TodoTask;
 import com.example.study.entity.DoneTask;
 import com.example.study.entity.Memo;
 import com.example.study.entity.Quiz;
+import com.example.study.entity.MaxTime;
 import com.example.study.service.StudyServiceTodoTask;
 import com.example.study.service.StudyServiceDoneTask;
 import com.example.study.service.StudyServiceMemo;
@@ -27,6 +28,7 @@ import com.example.study.form.TodoTaskForm;
 import com.example.study.form.DoneTaskForm;
 import com.example.study.form.MemoForm;
 import com.example.study.form.QuizForm;
+import com.example.study.form.MaxTimeForm;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -66,11 +68,17 @@ public class StudyController {
 		QuizForm quizForm = new QuizForm();
 		return quizForm;
 	}
+	@ModelAttribute
+	public MaxTimeForm setUpMaxTimeForm() {
+		MaxTimeForm maxTimeForm = new MaxTimeForm();
+		return maxTimeForm;
+	}
 	@GetMapping
-	public String showList(TodoTaskForm todoTaskForm, Model model) {
+	public String showList(TodoTaskForm todoTaskForm, MaxTimeForm maxTimeForm, Model model) {
 		todoTaskForm.setNewTodoTask(true);
 		Iterable<TodoTask> list = service.selectAllTodoTask();
 		model.addAttribute("list", list);
+		//model.addAttribute("maxTimeForm",maxTimeForm);
 		model.addAttribute("title", "登録用フォーム");
 		return "crud";
 	}
@@ -100,6 +108,7 @@ public class StudyController {
 			Model model, RedirectAttributes redirectAttributes) {
 		//FormからEntityへの詰め替え
 		TodoTask todoTask = makeTodoTask(todoTaskForm);
+		MaxTimeForm maxTimeForm = new MaxTimeForm();
 		//入力チェック
 		if(!bindingResult.hasErrors()) {
 			service.insertTodoTask(todoTask);
@@ -107,7 +116,7 @@ public class StudyController {
 			return "redirect:/study";
 		} else {
 			//エラーがある場合は、一覧表示処理を呼ぶ
-			return showList(todoTaskForm, model);
+			return showList(todoTaskForm, maxTimeForm, model);
 		}
 	}
 	@GetMapping("/{todo_id}")
@@ -327,13 +336,20 @@ public class StudyController {
 		return "random";
 	}*/
 	@PostMapping("/random")
-	public String showTodoTask(@RequestParam("maxTime") Integer maxTime, Model model) {
+	public String showTodoTask(@Validated MaxTimeForm maxTimeForm, BindingResult bindingResult, Model model) {
+			TodoTaskForm todoTaskForm = new TodoTaskForm();
 		//Integer maxTime = 200; //好きな値を入力してもらうようにする
-		//TodoTaskを取得
-		Iterable<TodoTask> todoTaskList = service.selectAllTodoTask();
-		Iterable<TodoTask> selectTodoTaskList = DP(todoTaskList,maxTime);
-		model.addAttribute("selectTodoTaskList",selectTodoTaskList);
-		return "random";
+		if(!bindingResult.hasErrors()) {
+			Integer maxTime = maxTimeForm.getMax_time();
+			//TodoTaskを取得
+			Iterable<TodoTask> todoTaskList = service.selectAllTodoTask();
+			Iterable<TodoTask> selectTodoTaskList = DP(todoTaskList,maxTime);
+			model.addAttribute("selectTodoTaskList",selectTodoTaskList);
+			return "random";
+		} else {
+			model.addAttribute("timeNull","時間が入力されていません");
+			return showList(todoTaskForm, maxTimeForm, model);
+		}
 	}
 	
 	@GetMapping("/doneTodoTask")
