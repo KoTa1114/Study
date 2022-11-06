@@ -23,9 +23,6 @@
 	          <a class="nav-link" href="/study/done">Done</a>
 	        </li>
 	        <li class="nav-item">
-	        	<a class="nav-link" href="/study/random">Random</a>
-	        </li>
-	        <li class="nav-item">
 	        	<a class="nav-link" href="/study/memo">Memo</a>
 	        </li>
 	       	<li class="nav-item">
@@ -47,7 +44,7 @@
 		th:object="${quizForm}">
 		<div class="form-group">
 			<label>クイズの内容</label><br>
-			<textarea rows="2" cols="50" th:field="*{quiz_question}" class="form-control"  placeholder="資料作成"></textarea><br>
+			<textarea rows="2" cols="50" th:field="*{quiz_question}" class="form-control"  placeholder="リンゴは英語でappleである"></textarea><br>
 			<div th:if="${#fields.hasErrors('quiz_question')}" th:errors="*{quiz_question}"
 			style="color:red"></div>
 		</div>
