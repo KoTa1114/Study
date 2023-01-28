@@ -19,7 +19,7 @@ import com.example.study.entity.TodoTask;
 import com.example.study.entity.DoneTask;
 import com.example.study.entity.Memo;
 import com.example.study.entity.Quiz;
-import com.example.study.entity.MaxTime;
+//import com.example.study.entity.MaxTime;
 import com.example.study.service.StudyServiceTodoTask;
 import com.example.study.service.StudyServiceDoneTask;
 import com.example.study.service.StudyServiceMemo;
@@ -32,8 +32,8 @@ import com.example.study.form.MaxTimeForm;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+//import java.util.Iterator;
+//import java.util.List;
 
 
 
